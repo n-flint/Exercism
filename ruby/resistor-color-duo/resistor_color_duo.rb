@@ -1,16 +1,17 @@
-class ResistorColorDuo
+module ResistorColorDuo
+  extend self
 
-  def self.value(input)
-    colors = ['black',
-              'brown',
-              'red',
-              'orange',
-              'yellow',
-              'green',
-              'blue',
-              'violet',
-              'grey',
-              'white']
+  def value(input)
+    colors = %w(black
+                brown
+                red
+                orange
+                yellow
+                green
+                blue
+                violet
+                grey
+                white)
     values = []
     input.first(2).each do |color|
       values << colors.index(color)
