@@ -84,7 +84,7 @@ class SeriesTest < Minitest::Test
   end
 
   def test_more_complicated_slice_that_blows_up
-    skip
+    # skip
     slice_string = '01032987583'
 
     series = Series.new(slice_string)

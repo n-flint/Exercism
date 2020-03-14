@@ -5,14 +5,14 @@ class Series
   end
 
   def slices(count)
-    # if count > @input_array.count
+    if count <= @input_array.count
       slices_array = []
         @input_array.each_cons(count) do |series|
           slices_array << series.join
         end
         slices_array
-      end
-    # else
-      # raise ArgumenxtError
-    # end
+    else
+      raise ArgumentError
+    end
+  end
 end
