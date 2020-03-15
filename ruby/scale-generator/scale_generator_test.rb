@@ -98,7 +98,7 @@ class ScaleGeneratorTest < Minitest::Test
   end
 
   def test_locrian_mode
-    # skip
+    skip
     locrian = Scale.new('g', :locrian, 'mMMmMMM')
     expected = %w(G Ab Bb C Db Eb F)
     actual = locrian.pitches
@@ -106,7 +106,7 @@ class ScaleGeneratorTest < Minitest::Test
   end
 
   def test_harmonic_minor
-    # skip
+    skip
     harmonic_minor = Scale.new('d', :harmonic_minor, 'MmMMmAm')
     expected = %w(D E F G A Bb Db)
     actual = harmonic_minor.pitches
