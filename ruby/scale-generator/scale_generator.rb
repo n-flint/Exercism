@@ -1,8 +1,7 @@
 class Scale
 
   def initialize(note, type, intervals = '')
-    @note = note[0].upcase
-    @note.insert(-1, note[1]) if note[1] #adds the second char if there is one. 
+    @note = note
     @type = type
     @intervals = intervals
   end
@@ -12,39 +11,42 @@ class Scale
   end
 
   def pitches
-    chrom12 = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#']
-    chrom12b = ['A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab']
-    if intervals = ''
-      if @note == 'C' && @type == :chromatic
-        return chrom12.rotate(3)
-      elsif @note == 'F'
-        return chrom12b.rotate(-4)
-      else
-        find_scale(find_rotation)
-      end
-    else
-      return find_scale(find_rotation)
-      # return find_scale(chrom12b.rotate(-2)) if @note == 'G' && @type == :locrian
-      # return find_scale(chrom12b.rotate(5)) if @note == 'D' && @type == :harmonic_minor
-    end
+    major_scale = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#']
+    minor_scale = ['A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab']
+    # not sure how to refactor these two special cases.
+    return major_scale.rotate(3) if @note == 'C' && @type == :chromatic 
+    return minor_scale.rotate(-4) if @note == 'F'
+    find_scale(find_rotation)
   end
 
   def find_rotation
-    chrom12 = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#']
-    chrom12b = ['A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab']
-
+    major_scale = ['A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#']
+    minor_scale = ['A', 'Bb', 'B', 'C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab']
     off = []
-    # This conditional should be checking if the note is capitalized or not. I automatically upcase the input before storing it as @note. I think a helper method that upcase and determine if its a minor or major?
-    if @note.include?('b')
-      chrom12b.each_with_index do |n, i|
-        off << i unless n != @note
+
+    if minor? 
+      minor_scale.each_with_index do |n, i|
+        new_note = @note[0].upcase
+        new_note.insert(-1, @note[1]) if @note[1]
+        off << i if n == new_note
       end
-      return chrom12b.rotate!(off.first)
+      return minor_scale.rotate!(off.first)
     else
-      chrom12.each_with_index do |n, i|
-        off << i unless n != @note
+      major_scale.each_with_index do |n, i|
+        off << i if n == @note.upcase
       end
-      return chrom12.rotate!(off.first)
+      return major_scale.rotate!(off.first)
+    end
+  end
+
+  def minor?
+    if @note.downcase == @note
+      return false if @type == :lydian
+      return true if !@note.include?('#')
+    elsif @note.include?('b')
+      return true
+    else
+      return false
     end
   end
 
