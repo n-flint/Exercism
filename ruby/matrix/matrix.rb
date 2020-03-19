@@ -1,19 +1,21 @@
 class Matrix
 
   def initialize(string)
-    @string = string
+    matrix = []
+    string.split("\n").each do |r|
+      x = r.split.map do |d|
+        d.to_i
+      end
+      matrix << x
+    end
+    @matrix = matrix
   end
 
   def rows
-    matrix = []
-    require 'pry'; binding.pry
-    @string.chars.chunk do |yo|
-      unless yo == '\n'
-        matrix << yo
-      require 'pry'; binding.pry
-      end
-      # @string.split(/\n/)
+    @matrix
+  end
 
-    end
+  def columns
+    @matrix.transpose
   end
 end
