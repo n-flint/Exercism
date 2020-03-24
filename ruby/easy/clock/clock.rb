@@ -1,61 +1,39 @@
 class Clock
-  # attr_reader :time
-  # changed the mthod name to 'get_time', from 'to_s'. I could not get the initialize method to return anything butthe object itself, shich does not convert to a string
 
-  def initialize(time_input)
-    # while time_input[:hour] > 12
-
-    require 'pry'; binding.pry
-    if time_input[:minute] >= 60
-      mins = transform_mins(time_input) if time_input[:minute]
-    else
-    end
-
-    if time_input
-
-    x = transform_hours(time_input, mins) if mins
-    # require 'pry'; binding.pry
-    # time_input[:hour] = (time_input[:hour] % 12) if time_input[:hour] && time_input[:hour]> 12
-    # # time_input[:minute] = (time_input[:minute] % 60) if time_input[:hour] > 60
-    # if time_input[:minute] && time_input[:minute] >= 60
-    #   h = time_input[:minute] / 60
-    #   time_input[:minute] = time_input[:minute] % 60
-    #   #need another roll over?
-    #   if time_input[:hour]
-    #     # require 'pry'; binding.pry
-    #     time_input[:hour] += h
-    #     time_input[:hour] = (time_input[:hour] % 12) if time_input[:hour] > 12
-
-    #   else
-    #     time_input[:hour] = h
-    #   end
-    #   # add minutes to hours
-    # else
-    # end
-    # # require 'pry'; binding.pry
-    # @hour = time_input[:hour].to_s.rjust(2, '0')
-    # @minute = time_input[:minute].to_s.rjust(2, '0')
-    # require 'pry'; binding.pry
-  end
-
-  def transform_mins(time)
-    # require 'pry'; binding.pry
-    new_time = {hour: 0, minute: 0}
-    if time[:minute] >= 60
-      new_time[:hour] = time[:minute] / 60
-      new_time[:minute] = time[:minute] % 60
-
-    # require 'pry'; binding.pry
-    else
-      new_time[:minute] = time[:minute]
-    end
-    new_time
+  def initialize(time)
+    @hour = time[:hour]
+    @minute = time[:minute]
   end
 
   def get_time
-    # @time = @hour[:hour].to_s.rjust(2, '0') + ':' + @minute[:minute].to_s.rjust(2, '0')
-    @time = @hour + ':' + @minute
-    return @time
+    @minute = pos_mins if @minute && @minute < 0
+    (':' + find_mins).insert(0, find_hours)
   end
 
+  def pos_mins
+    @rollover = @minute / 60
+    @minute =  ((@minute - 60) % 60).to_s.rjust(2, '0').to_i
+  end
+
+  def find_mins
+    @minute = 0 if @minute == nil
+      if @minute >= 60
+        @rollover = @minute / 60
+        (@minute % 60).to_s.rjust(2, '0')
+      else
+        @minute.to_s.rjust(2, '0')
+      end
+  end
+
+  def find_hours
+    @hour = 0 if @hour == nil
+    @hour = @hour + @rollover if @rollover
+      if @hour >= 24
+        (@hour % 24).to_s.rjust(2, '0')
+      elsif @hour < 0
+        ((@hour - 24) % 24).to_s.rjust(2, '0')
+      else
+        @hour.to_s.rjust(2, '0')
+      end
+  end
 end
