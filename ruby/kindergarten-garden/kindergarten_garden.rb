@@ -60,7 +60,7 @@ class Garden
         ginny: [12, 13],
         harriet: [14, 15],
         ileana: [16, 17],
-        joseph: [18, 19],
+        joseph: [18, 19], 
         kincaid: [20, 21],
         larry: [22, 23]
       }
